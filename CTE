@@ -1,0 +1,20 @@
+Here is a SQL query with a common table expression:
+
+WITH average_paid (customer_id, first_name, last_name, country, city, total_payment_amount) AS
+	(SELECT A.customer_id,
+		A.first_name,
+		A.last_name,
+		D.country,
+		C.city,
+		SUM(amount) as "total_payment_amount"
+	FROM customer A
+	INNER JOIN address B ON A.address_ID = B.address_ID
+	INNER JOIN city C ON B.city_ID = C.city_ID
+	INNER JOIN country D on C.country_ID = D.country_ID
+	INNER JOIN payment E on A.customer_ID = E.customer_ID
+	WHERE city IN ('Cape Coral','Santa Brbara dOeste','Memphis','Tanza','Valparai','Santa Rosa','Aurora','Tanauan','Halisahar','Bijapur')
+	GROUP BY A.customer_id, first_name, last_name, country, city
+	ORDER BY SUM(amount) DESC
+	LIMIT 5)
+SELECT AVG(total_payment_amount)
+FROM average_paid

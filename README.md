@@ -1,2 +1,10 @@
 # rockbuster-stealth-analysis
-Enter description here. 
+Purpose of repository
+
+## Objective
+
+## Tools
+
+## Executing the Code
+
+## Resources

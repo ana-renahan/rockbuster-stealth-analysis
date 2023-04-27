@@ -1,4 +1,4 @@
-# rockbuster-stealth-analysis
+# sql-rockbuster-stealth-analysis
 Purpose of repository
 
 ## Objective

@@ -1,5 +1,9 @@
 # sql-rockbuster-stealth-analysis
-Purpose of repository
+The purpose of this repository is to demonstrate the execution of foundational and complex 
+queries against a given database in SQL. These queries include the following techniques:
+- Joining tables
+- Creating subqueries
+- Creating common table expressions
 
 ## Objective
 Rockbuster Stealth LLC is a fictitious movie rental company planning to use its existing movie licenses to launch an online video rental service in order to stay 
@@ -8,7 +12,12 @@ As a data analyst for Rockbuster’s business intelligence department, I was tas
 their 2020 company strategy. 
 
 ## Tools
+For this project, the following tools were used:
+- PostgreSQL
+- pgAdmin4
+- PowerPoint
 
 ## Executing the Code
+The data is available in the following link.
+The code is available as text files that can be run through PostgreSQL.
 
-## Resources

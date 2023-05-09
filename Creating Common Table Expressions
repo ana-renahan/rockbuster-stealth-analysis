@@ -1,0 +1,60 @@
+Below are two examples of creating common table expressions.
+
+Example 1. Find the average amount paid by the top 5 customers.
+
+WITH average_paid (customer_id, first_name, last_name, country, city, total_payment_amount) AS
+	(SELECT A.customer_id,
+		A.first_name,
+		A.last_name,
+		D.country,
+		C.city,
+		SUM(amount) as "total_payment_amount"
+	FROM customer A
+	INNER JOIN address B ON A.address_ID = B.address_ID
+	INNER JOIN city C ON B.city_ID = C.city_ID
+	INNER JOIN country D on C.country_ID = D.country_ID
+	INNER JOIN payment E on A.customer_ID = E.customer_ID
+	WHERE city IN ('Cape Coral','Santa Brbara dOeste','Memphis','Tanza','Valparai','Santa Rosa','Aurora','Tanauan','Halisahar','Bijapur')
+	GROUP BY A.customer_id, first_name, last_name, country, city
+	ORDER BY SUM(amount) DESC
+	LIMIT 5)
+SELECT AVG(total_payment_amount)
+FROM average_paid
+
+Example 2. Find out how many of the top 5 customers are based in each country. 
+
+-- DEFINE CTE I
+WITH country_customer_count (customer_id, country) AS
+	(SELECT A.customer_id,
+			D.country
+	FROM customer A
+	INNER JOIN address B ON A.address_ID = B.address_ID
+	INNER JOIN city C ON B.city_ID = C.city_ID
+	INNER JOIN country D on C.country_ID = D.country_ID
+	INNER JOIN payment E on A.customer_ID = E.customer_ID),
+--DEFINE CTE II
+top_customers (top_customer_id, first_name, last_name, country, city, total_payment_amount) AS
+	(SELECT A.customer_id,
+		A.first_name,
+		A.last_name,
+		D.country,
+		C.city,
+		SUM(amount) as total_payment_amount
+	FROM customer A
+	INNER JOIN address B ON A.address_ID = B.address_ID
+	INNER JOIN city C ON B.city_ID = C.city_ID
+	INNER JOIN country D on C.country_ID = D.country_ID
+	INNER JOIN payment E on A.customer_ID = E.customer_ID
+	WHERE city IN ('Cape Coral','Santa Brbara dOeste','Memphis','Tanza','Valparai','Santa Rosa','Aurora','Tanauan','Halisahar','Bijapur')
+	GROUP BY A.customer_id, first_name, last_name, country, city
+	ORDER BY total_payment_amount DESC
+	LIMIT 5)
+-- MAIN STATEMENT
+SELECT A.country,
+	COUNT(DISTINCT customer_id) as all_customer_count,
+	COUNT(DISTINCT top_customer_id) as top_customer_count
+FROM country_customer_count A
+FULL JOIN top_customers B ON A.country = B.country
+GROUP BY A.country
+ORDER BY top_customer_count DESC
+LIMIT 5

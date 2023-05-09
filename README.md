@@ -25,3 +25,6 @@ The code is available in the following files in this repository and can be ran t
 - Creating Subqueries
 - Joining Tables
 
+## Additional Information
+A visualization of the customer count and customer payments by country can be found in the following link: [Tableau Public](https://public.tableau.com/app/profile/ana.renahan/viz/CustomerCountandCustomerPaymentsbyCountry/MAPCustomerCountandPayment).
+

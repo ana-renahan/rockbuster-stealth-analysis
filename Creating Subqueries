@@ -1,6 +1,6 @@
-# Below are two examples of creating subqueries.
+Below are two examples of creating subqueries.
 
-## Example 1. Find the average amount paid by the top 5 customers.
+Example 1. Find the average amount paid by the top 5 customers.
 
 SELECT AVG(total_payment_amount) AS average
 FROM 
@@ -20,7 +20,7 @@ FROM
 	ORDER BY SUM(amount) DESC
 	LIMIT 5) AS "total_amount_paid"
 
-## Example 2. Find out how many of the top 5 customers are based in each country.
+Example 2. Find out how many of the top 5 customers are based in each country.
 
 -- OUTER STATEMENT PT. I
 SELECT 

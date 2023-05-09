@@ -1,1 +1,116 @@
 
+
+Example 1. Write a query to find the top 10 countries for Rockbuster in terms of customer numbers. 
+Description: For this first query, I joined the customer, address, city, and country tables in order to get a 
+count of how many customers are located in each country. This shows us the count of customers for each country 
+from highest to lowest.  
+
+SELECT D.country,
+	COUNT(customer_ID)
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+GROUP BY country
+ORDER BY COUNT(customer_ID) DESC
+LIMIT 10
+____________________________________________________________________________________________________________
+Example 2. Write a query to find the top 10 cities within the top 10 countries identified in Example 1. 
+Description: Initially, I wrote a query using WHERE to see which cities had the highest number of customers in 
+the countries with the highest number of customers. However, I quickly noticed that there was only one city listed 
+that had a count of customers >1. 
+
+I then took a step back to see how many customers were in each city (keeping in mind that there are 599 customers 
+listed in the customer table). From the second query (shown above), I could see that there were only two cities that 
+had >1 customers – London, United Kingdom and Aurora, United States. Because the other 597 cities would be tied for 
+second with a count of 1, I decided that there needed to be a different metric to determine the “top cities in the top country.”
+
+For the last query, I added the payment table in order to get a sum of the “amount” field (note, I rewrote the query to change 
+the sum field to be called “sum_payment” but didn’t re-take the screenshots!). With this query, I can see the top 10 cities 
+for the top 10 countries by how many dollars brought in through payments. I could also limit this query to 10 to show the top 
+ten (1-10), but above, I’ve highlighted the top city for each top country.
+
+
+Step 1.
+SELECT D.country,
+	C.city,
+	COUNT(customer_ID)
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+WHERE country IN ('India','China','United States','Japan','Mexico','Brazil','Russian Federation','Philippines','Turkey','Indonesia')
+GROUP BY country, city
+ORDER BY COUNT(customer_ID) DESC
+LIMIT 10
+
+Step 2.
+SELECT D.country,
+	C.city,
+	COUNT(customer_ID)
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+GROUP BY country,city
+ORDER BY COUNT(customer_ID) DESC
+
+Step 3. 
+SELECT D.country,
+	C.city,
+	SUM(amount) AS “sum_payment”
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+INNER JOIN payment E on A.customer_ID = E.customer_ID
+WHERE country IN ('India','China','United States','Japan','Mexico','Brazil','Russian Federation','Philippines','Turkey','Indonesia')
+GROUP BY country, city
+ORDER BY SUM(amount) DESC
+_______________________________________________________________________________________________________________________
+Example 3. Write a query to find the top 5 customers in the top 10 cities who have paid the highest total amounts to Rockbuster. 
+Description: The first query below (Option 1) shows the top five customers when using the WHERE for one city per each top country 
+(i.e. the cities found in Example 2 Step 3). The second query below (Option 2) shows the top five customers when using the WHERE for 
+the top 10 cities based on amount paid (duplicate coutries allowed). 
+
+If Rockbuster is interested in selecting customers who have had the most amount paid regardless if there are customers who come 
+from the same country, I would suggest referring to Option 2 below.
+
+If Rockbuster is interested in only selecting one customer in each country (most amount paid), I would suggest referring to Option 1 below. 
+
+Option 1.
+SELECT A.customer_id,
+	A.first_name,
+	A.last_name,
+	D.country,
+	C.city,
+	SUM(amount) as "total_payment_amount"
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+INNER JOIN payment E on A.customer_ID = E.customer_ID
+WHERE city IN ('Cape Coral','Santa Brbara dOeste','Tanza','Valparai','Usolje-Sibirskoje','Probolinggo','Zhoushan','Balikesir','Uruapan','Shimonoseki')
+GROUP BY A.customer_id, first_name, last_name, country, city
+ORDER BY SUM(amount) DESC
+LIMIT 5
+
+Option 2.
+SELECT A.customer_id,
+	A.first_name,
+	A.last_name,
+	D.country,
+	C.city,
+	SUM(amount) as "total_payment_amount"
+FROM customer A
+INNER JOIN address B ON A.address_ID = B.address_ID
+INNER JOIN city C ON B.city_ID = C.city_ID
+INNER JOIN country D on C.country_ID = D.country_ID
+INNER JOIN payment E on A.customer_ID = E.customer_ID
+WHERE city IN ('Cape Coral','Santa Brbara dOeste','Memphis','Tanza','Valparai','Santa Rosa','Aurora','Tanauan','Halisahar','Bijapur')
+GROUP BY A.customer_id, first_name, last_name, country, city
+ORDER BY SUM(amount) DESC
+LIMIT 5
+
+
+

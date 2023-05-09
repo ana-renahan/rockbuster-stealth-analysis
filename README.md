@@ -18,6 +18,10 @@ For this project, the following tools were used:
 - PowerPoint
 
 ## Executing the Code
-The data is available in the following link.
-The code is available as text files that can be run through PostgreSQL.
+The data is available in the following link: [Rockbuster Dataset]([https://pages.github.com/](http://www.postgresqltutorial.com/wp-content/uploads/2019/05/dvdrental.zip)).
+
+The code is available in the following files and can be ran through PostgreSQL:
+- Creating Common Table Expressions
+- Creating Subqueries
+- Joining Tables
 
